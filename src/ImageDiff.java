@@ -21,8 +21,9 @@ public class ImageDiff {
 
 
 
-        BufferedImage bi = Filters.blackAndWhite(image1);
+        //BufferedImage bi = Filters.blackAndWhite(image1);
 
+        BufferedImage bi = Filters.diff(image1, image2, 20);
 
         JFrame f = new JFrame("Load Image Sample");   
         f.addWindowListener(new WindowAdapter(){
