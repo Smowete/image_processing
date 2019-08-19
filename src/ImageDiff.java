@@ -18,13 +18,6 @@ public class ImageDiff {
             return;
         }
 
-        // ImageInfo info1 = new ImageInfo(image1);
-        // ImageInfo info2 = new ImageInfo(image2);
-        // if (info1.width != info2.width || info1.height != info2.height || info1.pixelLength != info2.pixelLength) {
-        //     throw new IllegalStateException(info1.width + " " + info1.height + " " + info1.pixelLength + " // " + 
-        //                                     info2.width + " " + info2.height + " " + info2.pixelLength);
-        // }
-
 
 
 
@@ -59,42 +52,3 @@ public class ImageDiff {
 
 
 
-
-
-class LoadImage extends Component {
-
-    BufferedImage img;
-
-    public LoadImage() {
-       try {
-           img = ImageIO.read(new File("lyuh.jpg"));
-       } catch (IOException e) {
-       }
-    }
-
-    public LoadImage(String fileName) {
-       try {
-           img = ImageIO.read(new File(fileName));
-       } catch (IOException e) {
-       }
-    }
-
-    public LoadImage(BufferedImage img) {
-       this.img = img;
-    }
-
-
-    public void paint(Graphics g) {
-        g.drawImage(img, 0, 0, null);
-    }
-
-    public Dimension getPreferredSize() {
-        if (img == null) {
-             return new Dimension(100,100);
-        } else {
-           return new Dimension(img.getWidth(null), img.getHeight(null));
-       }
-    }
-
-
-}

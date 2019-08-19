@@ -28,14 +28,46 @@ public class Filters {
             }
         }
         BufferedImage ret = new BufferedImage(info.width, info.height, BufferedImage.TYPE_3BYTE_BGR);
-        byte[] a = ((DataBufferByte)ret.getRaster().getDataBuffer()).getData();
+        byte[] retData = ((DataBufferByte)ret.getRaster().getDataBuffer()).getData();
         // System.out.println(info.pixelLength);
         // System.out.println(data.length);
         // System.out.println(a.length);
-        System.arraycopy(data, 0, a, 0, data.length);
+        System.arraycopy(data, 0, retData, 0, data.length);
 
         return ret;
     }
+
+    public static BufferedImage diff(BufferedImage input1, BufferedImage input2) {
+        ImageInfo info1 = new ImageInfo(input1);
+        ImageInfo info2 = new ImageInfo(input2);
+        if (info1.width != info2.width || info1.height != info2.height || info1.pixelLength != info2.pixelLength) {
+            throw new IllegalStateException(info1.width + " " + info1.height + " " + info1.pixelLength + " // " + 
+                                            info2.width + " " + info2.height + " " + info2.pixelLength);
+        }
+
+        // byte[] data = new byte[info.pixels.length];
+        // int pos = 0;
+        // for (int h = 0; h < info.height; h++) {
+        //     for (int w = 0; w < info.width; w++) {
+        //         byte val = (byte) ((byteToInt(info.pixels[pos]) + byteToInt(info.pixels[pos+1]) + byteToInt(info.pixels[pos+2])) / 3);
+        //         data[pos] = val;
+        //         data[pos+1] = val;
+        //         data[pos+2] = val;
+        //         pos += 3;
+        //     }
+        // }
+        // BufferedImage ret = new BufferedImage(info.width, info.height, BufferedImage.TYPE_3BYTE_BGR);
+        // byte[] retData = ((DataBufferByte)ret.getRaster().getDataBuffer()).getData();
+        // System.arraycopy(data, 0, retData, 0, data.length);
+
+        // return ret;
+        return null;
+    }
+
+
+
+
+
 
     public static void gaussian() {
 
