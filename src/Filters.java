@@ -7,14 +7,71 @@ import javax.swing.*;
 
 
 public class Filters {
-    
-    private static int byteToInt(byte b) {
-        return ((int) b&0xff);
-    }
 
-    private static int pos(int h, int w, ImageInfo info) {
-        return h * info.width * info.pixelLength + w * info.pixelLength;
+
+    ////////////////////////////////  Basic Filter Kernel  ////////////////////////////////
+
+    public static BufferedImage filterKernel(BufferedImage input, FilterKernel kernel) {
+        ImageInfo info = new ImageInfo(input);
+        byte[] data = new byte[info.pixels.length];
+
+        for (int h = 0; h < info.height; h++) {
+            for (int w = 0; w < info.width; w++) {
+
+        // for (int j = 0; j < height; j++) {  
+        //     for (int i = 0; i < width; i++) {
+    
+                for (int d = 0; d < info.pixelLength; d++) {
+                    double sum = 0;
+                    for (int b = 0; b < kernel.length(); b++) {  // b: kernel index h direction
+                        for (int a = 0; a < kernel.length(); a++) {  // a: kernel index w direction
+                            int x = w - 2 + a;  // pixel w direction
+                            int y = h - 2 + b;  // pixel h direction
+                            if (x < 0) {
+                                x = - x - 1;
+                            }
+                            if (x >= info.width) {
+                                x = info.width - (x - info.width) - 1;
+                            }
+                            if (y < 0) {
+                                y = - y - 1;
+                            }
+                            if (y >= info.height) {
+                                y = info.height - (y - info.height) - 1;
+                            }
+                            sum += byteToInt(info.pixels[info.pixelLength * x + info.pixelLength * y * info.width + d]) * kernel.get(a, b);
+                        }
+                    }
+                    // sum = sum / divisor;
+                    // sum += offset;
+                    if (sum < 0) {
+                        sum = 0;
+                    }
+                    if (sum > 255) {
+                        sum = 255;
+                    }
+                    byte val = (byte)((int)sum);
+                    data[info.pixelLength*w + info.pixelLength*h*info.width + d] = val;
+                }
+            }
+        }
+
+        BufferedImage ret = new BufferedImage(info.width, info.height, BufferedImage.TYPE_3BYTE_BGR);
+        byte[] retData = ((DataBufferByte)ret.getRaster().getDataBuffer()).getData();
+        System.arraycopy(data, 0, retData, 0, data.length);
+
+        return ret;
     }
+    
+
+
+
+
+
+
+
+    ////////////////////////////////  Filters  ////////////////////////////////
+
 
     // take the mean of RGB to calculate black and white value
     public static BufferedImage blackAndWhite(BufferedImage input) {
@@ -38,6 +95,12 @@ public class Filters {
         System.arraycopy(data, 0, retData, 0, data.length);
 
         return ret;
+    }
+
+
+    public static BufferedImage edge(BufferedImage input) {
+        return filterKernel(input, FilterKernel.edgeDetectionKernel());
+
     }
 
     public static BufferedImage diff(BufferedImage input1, BufferedImage input2, int threshold) {
@@ -138,6 +201,30 @@ public class Filters {
     public static void bilateralGaussian() {
 
     }
+
+
+
+
+
+
+    ////////////////////////////////  Utilities  ////////////////////////////////
+    
+    /*
+        Return a int value of a byte (0-255), which solves the problem of sign/unsigned byte 
+        resulting in negative number.
+    */
+    private static int byteToInt(byte b) {
+        return ((int) b&0xff);
+    }
+
+    /* 
+        Get the starting position (of BGR) of a pixel specified with (h, w)
+    */
+    private static int pos(int h, int w, ImageInfo info) {
+        return h * info.width * info.pixelLength + w * info.pixelLength;
+    }
+
+
 
 
 }
