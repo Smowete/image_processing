@@ -18,6 +18,13 @@ public class FilterKernel {
         {0,  0, -1,  0,  0},
         {0,  0,  0,  0,  0}
     };
+    // private static final double[][] KERNEL_VALUE_EDGE_DETECTION = {
+    //     { 0,  0,  0,  0,  0},
+    //     { 0,  -1,  0,  1,  0},
+    //     { 0,  -2,  0,  2,  0},
+    //     { 0,  -1,  0,  1,  0},
+    //     { 0,  0,  0,  0,  0}
+    // };
 
     
 
