@@ -17,16 +17,14 @@ public class Filters {
 
         for (int h = 0; h < info.height; h++) {
             for (int w = 0; w < info.width; w++) {
-
-        // for (int j = 0; j < height; j++) {  
-        //     for (int i = 0; i < width; i++) {
     
                 for (int d = 0; d < info.pixelLength; d++) {
                     double sum = 0;
                     for (int b = 0; b < kernel.length(); b++) {  // b: kernel index h direction
                         for (int a = 0; a < kernel.length(); a++) {  // a: kernel index w direction
-                            int x = w - 2 + a;  // pixel w direction
-                            int y = h - 2 + b;  // pixel h direction
+                            int x = w - kernel.length()/2 + a;  // pixel w direction
+                            int y = h - kernel.length()/2 + b;  // pixel h direction
+                            // Deal with edges
                             if (x < 0) {
                                 x = - x - 1;
                             }
@@ -39,7 +37,7 @@ public class Filters {
                             if (y >= info.height) {
                                 y = info.height - (y - info.height) - 1;
                             }
-                            sum += byteToInt(info.pixels[info.pixelLength * x + info.pixelLength * y * info.width + d]) * kernel.get(a, b);
+                            sum += byteToInt(info.pixels[pos(y, x, info) + d]) * kernel.get(a, b);
                         }
                     }
                     // sum = sum / divisor;
@@ -51,7 +49,7 @@ public class Filters {
                         sum = 255;
                     }
                     byte val = (byte)((int)sum);
-                    data[info.pixelLength*w + info.pixelLength*h*info.width + d] = val;
+                    data[pos(h, w, info) + d] = val;
                 }
             }
         }
